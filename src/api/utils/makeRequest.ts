@@ -6,7 +6,7 @@ type RequestOptions<TBody = unknown> = {
 
 export async function makeRequest<TResponse = unknown, TBody = unknown>(
   url: string,
-  options?: RequestOptions<TBody>
+  options?: RequestOptions<TBody>,
 ) {
   const { method = "GET", headers = {}, body } = options || {};
 
@@ -14,7 +14,6 @@ export async function makeRequest<TResponse = unknown, TBody = unknown>(
     method,
     headers: {
       ...headers,
-      "Content-Type": "application/json",
     },
   };
 

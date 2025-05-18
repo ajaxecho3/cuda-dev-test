@@ -1,16 +1,18 @@
 import type { Game } from "../types";
-import { makeRequest } from "./utils/makeRequest";
 
 export async function getConfig() {
-  const config = await makeRequest<Game>(
-    "/api/interview.mock.data/payload.json",
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    },
-  );
+  const response = await fetch("/api/interview.mock.data/payload.json", {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch game config");
+  }
+  const configData = await response.json();
+  if (!configData) {
+    throw new Error("Failed to parse game config");
+  }
+  const config: Game = configData as Game;
 
   if (!config) {
     throw new Error("Failed to fetch game config");

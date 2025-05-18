@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import {
   type Activity,
@@ -9,8 +9,9 @@ import {
 import { getConfig } from "../api/getGameConfig";
 import { GameContext } from "./context";
 
+const gameConfig = await getConfig();
+
 export function GameProvider(props: { children: ReactNode }) {
-  const gameConfig = use(getConfig());
   const [game, setGame] = useState<Game | null>(null);
   const [isShowResults, setIsShowResults] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
