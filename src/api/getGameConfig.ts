@@ -1,28 +1,15 @@
+import axios from "axios";
 import type { Game } from "../types";
+const base = "https://s3.eu-west-2.amazonaws.com";
 
+const environment = import.meta.env.MODE;
 export async function getConfig() {
-  const response = await fetch("/api/interview.mock.data/payload.json", {
-    method: "GET",
-  });
+  const response = await axios<Game>(
+    `${environment === "production" ? base : "/api/"}/interview.mock.data/payload.json`,
+    {
+      method: "GET",
+    },
+  );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch game config");
-  }
-  const configData = await response.json();
-  if (!configData) {
-    throw new Error("Failed to parse game config");
-  }
-  const config: Game = configData as Game;
-
-  if (!config) {
-    throw new Error("Failed to fetch game config");
-  }
-  if (config.activities.length === 0) {
-    throw new Error("Game config is empty");
-  }
-  if (config.activities[0].questions.length === 0) {
-    throw new Error("Game config has no questions");
-  }
-
-  return config;
+  return response.data;
 }

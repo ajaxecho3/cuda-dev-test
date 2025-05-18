@@ -9,8 +9,6 @@ import {
 import { getConfig } from "../api/getGameConfig";
 import { GameContext } from "./context";
 
-const gameConfig = await getConfig();
-
 export function GameProvider(props: { children: ReactNode }) {
   const [game, setGame] = useState<Game | null>(null);
   const [isShowResults, setIsShowResults] = useState(false);
@@ -64,9 +62,12 @@ export function GameProvider(props: { children: ReactNode }) {
     setSelectedActivity(null);
     setQuestionType(null);
   };
-
-  useEffect(() => {
+  async function getGameConfig() {
+    const gameConfig = await getConfig();
     setGame(gameConfig);
+  }
+  useEffect(() => {
+    getGameConfig();
   }, []);
 
   const value = {
