@@ -19,6 +19,8 @@ interface GameContextType {
   resetGame: () => void;
   activeRound: Round | null;
   setActiveRound: (round: Round) => void;
+  isShowResults: boolean;
+  setIsShowResults: (isShowResults: boolean) => void;
 }
 
 // Create the context

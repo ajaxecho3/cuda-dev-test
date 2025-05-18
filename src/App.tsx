@@ -1,4 +1,5 @@
 import Questions from "./components/Questions";
+import Result from "./components/Result";
 import { useGame } from "./provider/hook";
 
 function App() {
@@ -8,7 +9,33 @@ function App() {
     selectedActivity,
     questionType,
     activeRound,
+    isShowResults,
   } = useGame();
+
+  if (isShowResults) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-blue-50">
+        <div className="w-full max-w-2xl mx-auto">
+          <div className="overflow-hidden">
+            <div className="flex items-center justify-center min-h-screen bg-blue-50">
+              <div className="w-full max-w-2xl">
+                <div className="bg-white border border-blue-100">
+                  <div className="px-8 py-8">
+                    <p className="text-blue-500 text-xl font-bold">
+                      {selectedActivity?.activity_name}{" "}
+                      {questionType === "round" &&
+                        `/ ${activeRound && activeRound.round_title}`}
+                    </p>
+                  </div>
+                  <Result />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-blue-50">

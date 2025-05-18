@@ -13,6 +13,7 @@ const gameConfig = await getConfig();
 
 export function GameProvider(props: { children: ReactNode }) {
   const [game, setGame] = useState<Game | null>(null);
+  const [isShowResults, setIsShowResults] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
     null
   );
@@ -78,6 +79,8 @@ export function GameProvider(props: { children: ReactNode }) {
     resetGame,
     activeRound,
     setActiveRound,
+    isShowResults,
+    setIsShowResults,
   };
 
   return (

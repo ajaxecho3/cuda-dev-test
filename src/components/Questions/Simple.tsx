@@ -25,7 +25,7 @@ function wrapAsterisks(text: string, className: string = "text-blue-500") {
 }
 
 const Simple = ({ questions, isRound, roundOrder }: Props) => {
-  const { handleAnswer, resetGame, selectedActivity, setActiveRound } =
+  const { handleAnswer, selectedActivity, setActiveRound, setIsShowResults } =
     useGame();
   const [activeIndex, setActiveIndex] = React.useState<number>(0);
   const [isPending, startTransition] = useTransition();
@@ -46,57 +46,16 @@ const Simple = ({ questions, isRound, roundOrder }: Props) => {
         if (findNextRoundByRoundOrder) {
           setActiveRound(findNextRoundByRoundOrder);
           setActiveIndex(0);
+        } else {
+          setIsShowResults(true);
+          setActiveIndex(0);
         }
+      } else if (activeIndex >= questions.length - 1) {
+        setIsShowResults(true);
+        setActiveIndex(0);
       }
     });
   };
-
-  if (!isRound && activeIndex >= questions.length) {
-    return (
-      <div className="px-8 pb-16">
-        <h2 className="text-4xl font-bold text-blue-500">Results</h2>
-
-        <div className="mt-4">
-          {questions.map((question, index) => {
-            const rightAnswer = question.is_correct ? "CORRECT" : "INCORRECT";
-            const isRight = question.user_answers.join("") === rightAnswer;
-
-            return (
-              <div key={index} className="border-b border-blue-100 py-4">
-                <h3 className="text-lg font-bold">
-                  Q{index + 1}: {wrapAsterisks(question.stimulus)}
-                </h3>
-                <p className="text-gray-700">
-                  Your answer is{" "}
-                  {isRight ? (
-                    <span className="text-green-500">CORRECT</span>
-                  ) : (
-                    <span className="text-red-500">INCORRECT</span>
-                  )}
-                </p>
-                {!isRight && (
-                  <p className="text-gray-700">
-                    Feedback: {wrapAsterisks(question.feedback)}
-                  </p>
-                )}
-              </div>
-            );
-          })}
-        </div>
-        <div className="text-center mt-8">
-          <button
-            onClick={() => {
-              resetGame();
-              setActiveIndex(0);
-            }}
-            className="mt-4 text-blue-500  py-2 px-4 rounded cursor-pointer font-bold"
-          >
-            Home
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   console.log(selectedActivity);
 
