@@ -2,7 +2,13 @@ import Questions from "./components/Questions";
 import { useGame } from "./provider/hook";
 
 function App() {
-  const { game, handleActivitySelect, selectedActivity } = useGame();
+  const {
+    game,
+    handleActivitySelect,
+    selectedActivity,
+    questionType,
+    activeRound,
+  } = useGame();
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-blue-50">
@@ -14,7 +20,9 @@ function App() {
                 <div className="bg-white border border-blue-100">
                   <div className="px-8 py-8">
                     <p className="text-blue-500 text-xl font-bold">
-                      {selectedActivity.activity_name}
+                      {selectedActivity.activity_name}{" "}
+                      {questionType === "round" &&
+                        `/ ${activeRound && activeRound.round_title}`}
                     </p>
                   </div>
                   <Questions questions={selectedActivity.questions} />

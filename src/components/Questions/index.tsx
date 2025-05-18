@@ -8,7 +8,6 @@ type Props = {
 };
 
 export default function Questions({ questions }: Props) {
-  //Check if BaseQuestion or Round
   const { questionType } = useGame();
   if (!questions) {
     return null;

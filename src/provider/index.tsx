@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import { type Activity, type Game, type SimpleQuestion } from "../types";
+import {
+  type Activity,
+  type Game,
+  type Round,
+  type SimpleQuestion,
+} from "../types";
 import { getConfig } from "../api/getGameConfig";
 import { GameContext } from "./context";
 
@@ -16,12 +21,15 @@ export function GameProvider(props: { children: ReactNode }) {
     null
   );
 
+  const [activeRound, setActiveRound] = useState<Round>({} as Round);
+
   const handleActivitySelect = (activity: Activity) => {
     setSelectedActivity(activity);
 
     const question = activity.questions[0];
     if ("round_title" in question) {
       setQuestionType("round");
+      setActiveRound(question as Round);
     } else {
       setQuestionType("base");
     }
@@ -30,14 +38,24 @@ export function GameProvider(props: { children: ReactNode }) {
   const handleAnswer = ({
     index,
     answer,
+    roundOrder,
   }: {
     index: number;
     answer: string;
+    roundOrder?: number;
   }) => {
     const activity = selectedActivity;
-    if (activity) {
-      const question = activity.questions[index] as SimpleQuestion;
+    if (roundOrder) {
+      const round = activity?.questions.find(
+        (question) => question.order === roundOrder
+      ) as Round;
+      const question = round.questions[index];
       question.user_answers.push(answer);
+    } else {
+      if (activity) {
+        const question = activity.questions[index] as SimpleQuestion;
+        question.user_answers.push(answer);
+      }
     }
   };
 
@@ -58,6 +76,8 @@ export function GameProvider(props: { children: ReactNode }) {
     questionType,
     handleAnswer,
     resetGame,
+    activeRound,
+    setActiveRound,
   };
 
   return (

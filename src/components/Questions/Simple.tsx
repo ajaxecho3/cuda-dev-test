@@ -1,9 +1,11 @@
 import React, { Fragment, useTransition } from "react";
-import type { SimpleQuestion } from "../../types";
+import type { Round, SimpleQuestion } from "../../types";
 import { useGame } from "../../provider/hook";
 
 type Props = {
   questions: SimpleQuestion[];
+  isRound?: boolean;
+  roundOrder?: number;
 };
 
 function wrapAsterisks(text: string, className: string = "text-blue-500") {
@@ -22,20 +24,34 @@ function wrapAsterisks(text: string, className: string = "text-blue-500") {
   });
 }
 
-const Simple = ({ questions }: Props) => {
-  console.log(questions);
-  const { handleAnswer, resetGame } = useGame();
+const Simple = ({ questions, isRound, roundOrder }: Props) => {
+  const { handleAnswer, resetGame, selectedActivity, setActiveRound } =
+    useGame();
   const [activeIndex, setActiveIndex] = React.useState<number>(0);
   const [isPending, startTransition] = useTransition();
 
   const handleClick = (index: number, answer: string) => {
     startTransition(() => {
       setActiveIndex(() => index + 1);
-      handleAnswer({ index, answer });
+      handleAnswer({ index, answer, roundOrder });
+
+      if (isRound && activeIndex >= questions.length - 1) {
+        const findNextRoundByRoundOrder = (
+          selectedActivity?.questions || []
+        ).find(
+          (question) =>
+            "round_title" in question && question.order === roundOrder! + 1
+        ) as Round;
+
+        if (findNextRoundByRoundOrder) {
+          setActiveRound(findNextRoundByRoundOrder);
+          setActiveIndex(0);
+        }
+      }
     });
   };
 
-  if (activeIndex >= questions.length) {
+  if (!isRound && activeIndex >= questions.length) {
     return (
       <div className="px-8 pb-16">
         <h2 className="text-4xl font-bold text-blue-500">Results</h2>
@@ -82,11 +98,13 @@ const Simple = ({ questions }: Props) => {
     );
   }
 
+  console.log(selectedActivity);
+
   return (
     <Fragment>
       {questions.map((question, index) => {
         return (
-          <Fragment key={index}>
+          <Fragment key={question.order}>
             {activeIndex === index && (
               <div key={index}>
                 <div className="px-8 pb-16">

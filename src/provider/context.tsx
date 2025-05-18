@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { Activity, Game } from "../types";
+import type { Activity, Game, Round } from "../types";
 
 interface GameContextType {
   game: Game | null;
@@ -7,8 +7,18 @@ interface GameContextType {
   selectedActivity: Activity | null;
   handleActivitySelect: (activity: Activity) => void;
   questionType: "base" | "round" | null;
-  handleAnswer: ({ index, answer }: { index: number; answer: string }) => void;
+  handleAnswer: ({
+    index,
+    answer,
+    roundOrder,
+  }: {
+    index: number;
+    answer: string;
+    roundOrder?: number;
+  }) => void;
   resetGame: () => void;
+  activeRound: Round | null;
+  setActiveRound: (round: Round) => void;
 }
 
 // Create the context
