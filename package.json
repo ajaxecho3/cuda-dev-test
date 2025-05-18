@@ -1,6 +1,6 @@
 {
   "name": "cuda-dev-test",
-  "private": true,
+  "homepage": "https://ajaxecho3.github.io/cuda-dev-test/",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
