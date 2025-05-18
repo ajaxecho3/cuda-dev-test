@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import {
   type Activity,
@@ -9,17 +9,16 @@ import {
 import { getConfig } from "../api/getGameConfig";
 import { GameContext } from "./context";
 
-const gameConfig = await getConfig();
-
 export function GameProvider(props: { children: ReactNode }) {
+  const gameConfig = use(getConfig());
   const [game, setGame] = useState<Game | null>(null);
   const [isShowResults, setIsShowResults] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
-    null
+    null,
   );
 
   const [questionType, setQuestionType] = useState<"base" | "round" | null>(
-    null
+    null,
   );
 
   const [activeRound, setActiveRound] = useState<Round>({} as Round);
@@ -48,7 +47,7 @@ export function GameProvider(props: { children: ReactNode }) {
     const activity = selectedActivity;
     if (roundOrder) {
       const round = activity?.questions.find(
-        (question) => question.order === roundOrder
+        (question) => question.order === roundOrder,
       ) as Round;
       const question = round.questions[index];
       question.user_answers.push(answer);
