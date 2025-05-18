@@ -1,4 +1,3 @@
-import React from "react";
 import { useGame } from "../provider/hook";
 
 function wrapAsterisks(text: string, className: string = "text-blue-500") {
