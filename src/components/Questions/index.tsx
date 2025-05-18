@@ -1,4 +1,4 @@
-import type { Question, SimpleQuestion, Round } from "../../types";
+import type { Question, SimpleQuestion } from "../../types";
 import { useGame } from "../../provider/hook";
 import Simple from "./Simple";
 import RoundComponent from "./Round";
@@ -17,5 +17,5 @@ export default function Questions({ questions }: Props) {
     return <Simple questions={questions as SimpleQuestion[]} />;
   }
 
-  return <RoundComponent questions={questions as Round[]} />;
+  return <RoundComponent />;
 }
